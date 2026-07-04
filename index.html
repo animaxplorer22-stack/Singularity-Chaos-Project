@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DUCO·SOL Wallet</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:radial-gradient(ellipse at 50% 0%,#1a1a2e 0%,#16213e 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:32px;padding:32px;max-width:960px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;box-shadow:0 8px 24px rgba(245,87,108,0.3)}
+.brand h1{font-size:26px;font-weight:700;background:linear-gradient(135deg,#f093fb,#f5576c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pulse-dot{display:flex;align-items:center;gap:8px;background:rgba(16,185,129,0.2);padding:6px 18px;border-radius:40px;border:1px solid rgba(16,185,129,0.3)}
+.pulse-dot span{width:8px;height:8px;background:#10b981;border-radius:50%;animation:pulse 2s infinite}
+.pulse-dot small{color:#6ee7b7;font-weight:500;font-size:13px}
+@keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}100%{opacity:1;transform:scale(1)}}
+.bal-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:28px}
+.bal-card{padding:22px 24px;border-radius:20px;color:#fff;transition:transform 0.2s ease;cursor:default}
+.bal-card:hover{transform:translateY(-3px)}
+.bal-duco{background:linear-gradient(135deg,#f093fb,#f5576c);box-shadow:0 8px 30px rgba(245,87,108,0.25)}
+.bal-sol{background:linear-gradient(135deg,#4facfe,#00f2fe);box-shadow:0 8px 30px rgba(79,172,254,0.25)}
+.bal-card h4{font-weight:400;opacity:0.85;font-size:13px;letter-spacing:0.5px;margin-bottom:6px}
+.bal-num{font-size:38px;font-weight:700;letter-spacing:-0.5px}
+.bal-label{font-size:13px;opacity:0.7;margin-top:4px}
+.tabs{display:flex;gap:8px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:12px;flex-wrap:wrap}
+.tab{background:transparent;border:none;padding:10px 22px;border-radius:12px;color:#94a3b8;font-weight:600;font-size:15px;cursor:pointer;transition:all 0.2s}
+.tab:hover{background:rgba(255,255,255,0.05);color:#e2e8f0}
+.tab.active{background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;box-shadow:0 4px 16px rgba(245,87,108,0.3)}
+.panel{display:none;animation:fade 0.3s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.panel h2{color:#e2e8f0;font-size:22px;margin-bottom:20px;font-weight:600}
+.fg{margin-bottom:18px}
+.fg label{display:block;color:#cbd5e1;font-weight:500;font-size:14px;margin-bottom:6px}
+.fg input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#f1f5f9;font-size:15px;transition:border 0.2s}
+.fg input:focus{outline:none;border-color:#f5576c;box-shadow:0 0 0 3px rgba(245,87,108,0.15)}
+.fg input::placeholder{color:#64748b}
+.btn{padding:13px 30px;border:none;border-radius:12px;font-weight:600;font-size:15px;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;box-shadow:0 4px 20px rgba(245,87,108,0.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(245,87,108,0.35)}
+.btn-success{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 4px 20px rgba(16,185,129,0.25)}
+.btn-success:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(16,185,129,0.35)}
+.btn-outline{background:rgba(255,255,255,0.05);color:#e2e8f0;border:1px solid rgba(255,255,255,0.12)}
+.btn-outline:hover{background:rgba(255,255,255,0.1)}
+.rate-box{background:rgba(251,191,36,0.08);border:1px dashed rgba(251,191,36,0.2);padding:18px;border-radius:16px;text-align:center;margin:16px 0 22px}
+.rate-box h3{color:#fbbf24;font-size:22px;font-weight:700}
+.rate-box p{color:#fcd34d;font-size:14px;opacity:0.8;margin-top:4px}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.ex-grid .btn{width:100%;justify-content:center}
+.sol-addr-box{background:rgba(255,255,255,0.04);padding:14px 18px;border-radius:12px;font-family:'Courier New',monospace;font-size:14px;color:#e2e8f0;word-break:break-all;border:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.copy-btn{background:rgba(255,255,255,0.08);border:none;padding:6px 14px;border-radius:8px;color:#cbd5e1;font-size:13px;cursor:pointer;transition:all 0.2s;font-weight:500}
+.copy-btn:hover{background:rgba(255,255,255,0.15);color:#f1f5f9}
+.divider{margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.06)}
+.history-empty{padding:40px 0;text-align:center;color:#64748b;font-size:15px}
+.toast{position:fixed;top:24px;right:24px;background:#1e293b;border:1px solid rgba(255,255,255,0.08);color:#e2e8f0;padding:14px 24px;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.5);transform:translateX(420px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);z-index:999;backdrop-filter:blur(12px);font-weight:500}
+.toast.show{transform:translateX(0)}
+@media(max-width:640px){.glass{padding:20px}.bal-grid{grid-template-columns:1fr}.bal-num{font-size:30px}.tabs .tab{flex:1;text-align:center;padding:10px 12px;font-size:13px}.ex-grid{grid-template-columns:1fr}.top{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="glass">
+<div class="top">
+<div class="brand"><div class="brand-icon">⚡</div><h1>DUCO·SOL</h1></div>
+<div class="pulse-dot"><span></span><small>LIVE</small></div>
+</div>
+<div class="bal-grid">
+<div class="bal-card bal-duco"><h4>🪙 DUCO</h4><div class="bal-num" id="ducoBal">—</div><div class="bal-label">available</div></div>
+<div class="bal-card bal-sol"><h4>◎ SOL</h4><div class="bal-num" id="solBal">—</div><div class="bal-label">available</div></div>
+</div>
+<div class="tabs">
+<button class="tab active" data-tab="gift">🎁 Gift</button>
+<button class="tab" data-tab="exchange">🔄 Exchange</button>
+<button class="tab" data-tab="history">📋 History</button>
+</div>
+<div class="panel active" id="panel-gift">
+<h2>Send DUCO</h2>
+<form id="giftForm">
+<div class="fg"><label>Recipient</label><input type="text" id="giftRecipient" placeholder="username" required></div>
+<div class="fg"><label>Password</label><input type="password" id="giftPassword" placeholder="your password" required></div>
+<div class="fg"><label>Amount</label><input type="number" id="giftAmount" placeholder="0" min="0" required></div>
+<button type="submit" class="btn btn-primary">Send Gift 🎁</button>
+</form>
+<div style="margin-top:18px;padding:14px;background:rgba(16,185,129,0.06);border-radius:12px;border-left:3px solid #10b981"><p style="color:#6ee7b7;font-size:14px">💡 You need sufficient DUCO balance</p></div>
+</div>
+<div class="panel" id="panel-exchange">
+<h2>Exchange</h2>
+<div class="rate-box"><h3>10,000 DUCO = 0.001 SOL</h3><p>fixed rate</p></div>
+<div class="ex-grid">
+<button class="btn btn-success" onclick="setExchange('DUCO')">Sell DUCO → SOL</button>
+<button class="btn btn-outline" onclick="setExchange('SOL')">Sell SOL → DUCO</button>
+</div>
+<form id="exchangeForm">
+<div class="fg"><label>Username</label><input type="text" id="exUser" placeholder="your username" required></div>
+<div class="fg"><label>Password</label><input type="password" id="exPass" placeholder="your password" required></div>
+<div class="fg" id="exAmountGroup"><label>Amount to sell</label><input type="number" id="exAmount" placeholder="0" min="0" required></div>
+<div class="fg" id="exDestGroup"><label>SOL destination</label><input type="text" id="exDest" placeholder="SOL wallet address" required></div>
+<button type="submit" class="btn btn-primary" id="exSubmitBtn">Execute</button>
+</form>
+</div>
+<div class="panel" id="panel-history">
+<h2>History</h2>
+<div id="historyList" class="history-empty">📭 No transactions yet</div>
+</div>
+<div class="divider">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+<span style="color:#94a3b8;font-weight:500;font-size:14px">SOL Wallet</span>
+<div class="sol-addr-box"><span id="solAddr">—</span><button class="copy-btn" onclick="copyAddr()">📋 Copy</button></div>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let exType='DUCO';
+let duco=0,sol=0;
+
+async function fetchAll(){
+try{
+const r=await fetch('/view');
+const t=await r.text();
+const d=t.match(/DUCO:\s*([\d.]+)/);
+if(d){duco=parseFloat(d[1]);document.getElementById('ducoBal').textContent=duco.toFixed(2);}
+const s=t.match(/SOL:\s*([\d.]+)/);
+if(s){sol=parseFloat(s[1]);document.getElementById('solBal').textContent=sol.toFixed(6);}
+const a=t.match(/<p>([A-Za-z0-9]{32,})<\/p>/);
+if(a)document.getElementById('solAddr').textContent=a[1];
+}catch(e){console.error(e)}
+}
+
+function toast(m){
+const t=document.getElementById('toast');
+t.textContent=m;
+t.classList.add('show');
+clearTimeout(t._hide);
+t._hide=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function copyAddr(){
+const a=document.getElementById('solAddr').textContent;
+if(a==='—')return;
+navigator.clipboard?.writeText(a).then(()=>toast('✅ Copied')).catch(()=>{
+const ta=document.createElement('textarea');
+ta.value=a;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('✅ Copied');
+});
+}
+
+document.querySelectorAll('.tab').forEach(t=>{
+t.addEventListener('click',function(){
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+this.classList.add('active');
+document.getElementById('panel-'+this.dataset.tab).classList.add('active');
+});
+});
+
+document.getElementById('giftForm').addEventListener('submit',async e=>{
+e.preventDefault();
+const r=document.getElementById('giftRecipient').value;
+const p=document.getElementById('giftPassword').value;
+const a=document.getElementById('giftAmount').value;
+if(!r||!p||!a){toast('⚠️ Fill all fields');return;}
+try{
+const res=await fetch(`/sendgift?name=${encodeURIComponent(r)}&psw=${encodeURIComponent(p)}&number=${encodeURIComponent(a)}`);
+const txt=await res.text();
+if(txt.includes('thanks')){toast('✅ Gift sent');fetchAll();}
+else toast('❌ Failed');
+}catch(err){toast('❌ Error');}
+});
+
+function setExchange(t){
+exType=t;
+document.getElementById('exSubmitBtn').textContent=t==='DUCO'?'Sell DUCO → SOL':'Sell SOL → DUCO';
+document.getElementById('exSubmitBtn').className=t==='DUCO'?'btn btn-success':'btn btn-primary';
+document.getElementById('exDestGroup').style.display=t==='DUCO'?'block':'none';
+document.getElementById('exAmountGroup').querySelector('label').textContent=t==='DUCO'?'DUCO to sell':'SOL to sell';
+document.querySelector('[data-tab="exchange"]').click();
+}
+
+document.getElementById('exchangeForm').addEventListener('submit',async e=>{
+e.preventDefault();
+const u=document.getElementById('exUser').value;
+const p=document.getElementById('exPass').value;
+const amt=document.getElementById('exAmount').value;
+const dest=document.getElementById('exDest').value;
+if(!u||!p||!amt){toast('⚠️ Fill all fields');return;}
+if(exType==='DUCO'){
+if(!dest){toast('⚠️ Enter SOL wallet');return;}
+if(parseFloat(amt)>duco){toast('❌ Insufficient DUCO');return;}
+try{
+const res=await fetch(`/exduco?name=${encodeURIComponent(u)}&psw=${encodeURIComponent(p)}&number=${encodeURIComponent(amt)}&dest=${encodeURIComponent(dest)}`);
+const txt=await res.text();
+if(txt.includes('done')){toast('✅ Exchange complete');fetchAll();}
+else if(txt.includes('not enough'))toast('Insufficient balance');
+else toast('Failed');
+}catch(err){toast('Error');}
+}else{
+toast('🔧 SOL→DUCO coming soon');
+}
+});
+
+fetchAll();
+setInterval(fetchAll,25000);
+</script>
+</body>
+</html>
